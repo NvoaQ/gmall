@@ -1,11 +1,12 @@
 package com.chendong.gmall.user.controller;
 
-import com.chendong.gmall.user.bean.UmsMember;
-import com.chendong.gmall.user.bean.UmsMemberReceiveAddress;
-import com.chendong.gmall.user.service.UserService;
+import com.chendong.gmall.bean.UmsMember;
+import com.chendong.gmall.bean.UmsMemberReceiveAddress;
+import com.chendong.gmall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -80,8 +81,8 @@ public class UserController {
 
     @RequestMapping("index")
     @ResponseBody
-    public String index(){
-        return "hello user";
+    public String index(@RequestParam("yourname") String name){
+        return "hello"+"\n"+name;
     }
 
 

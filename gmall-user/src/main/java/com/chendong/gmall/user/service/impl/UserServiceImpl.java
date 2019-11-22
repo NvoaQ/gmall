@@ -1,10 +1,10 @@
 package com.chendong.gmall.user.service.impl;
 
-import com.chendong.gmall.user.bean.UmsMember;
-import com.chendong.gmall.user.bean.UmsMemberReceiveAddress;
+import com.chendong.gmall.bean.UmsMember;
+import com.chendong.gmall.bean.UmsMemberReceiveAddress;
+import com.chendong.gmall.service.UserService;
 import com.chendong.gmall.user.mapper.UmsMemberReceiveAddressMapper;
 import com.chendong.gmall.user.mapper.UserMapper;
-import com.chendong.gmall.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -16,7 +16,7 @@ import java.util.List;
  * @date 2019/10/24 - 20:18
  */
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserMapper userMapper;
