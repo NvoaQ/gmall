@@ -13,10 +13,11 @@ public class PmsUploadUtil {
 
     public static String uploadImage(MultipartFile multipartFile) {
 
+        //服务器的ip地址
         String imgUrl = "http://192.168.182.128";
 
         //上传图片到服务器
-        //配置fdfs的全局链接地址
+        //配置fastdfs的全局链接地址
         String tracker = PmsUploadUtil.class.getResource("/tracker.conf").getPath();//获得配置文件的路径
 
         try {

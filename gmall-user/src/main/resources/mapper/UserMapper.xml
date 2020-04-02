@@ -9,7 +9,8 @@
             select t.* from ums_member t
     </select>
 
-    <!--另一种方式：mapper接口继承Mapper<T> 必须导入的包：tk.mybatis.mapper.common.Mapper
+    <!--
+        另一种方式：mapper接口继承Mapper<T> 必须导入的包：tk.mybatis.mapper.common.Mapper
         调用mapper工具类的方法实现增删改查
         注意：SpringBoot的启动扫描必须改成tk的MapperScan
     -->

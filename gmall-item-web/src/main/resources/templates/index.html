@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+    <!--取值-->
+    <h3 th:text="${hello}">打底值</h3>
+
+    <!--循环-->
+        <table border="1">
+            <tr th:each="str:${list}">
+                <td th:text="${str}"></td>
+            </tr>
+        </table>
+
+    <!--判断-->
+    <p th:if="1==1">我是存在的</p>
+
+    <input type="checkbox" th:checked="${check}=='1'"/>
+
+    <!--传值给JavaScript-->
+    <a th:href="'javascript:a(\''+${hello}+'\')'">点我</a>
+    <a th:href="'javascrit:click(\''+${hello}+'\')'">点我</a>
+
+    <a href="javascript:a('js本地方法！')">点我123</a>
+
+    <!--页面引入-->
+    <div th:include="indexInner">被引入的页面</div>
+    <div th:include="indexInner::innerPart">被引入的页面</div>
+
+    <script language="JavaScript">
+        function a(hello) {
+            alert("js被调用！"+hello);
+        }
+        function click(hello) {
+            alert("点击了"+hello);
+        }
+    </script>
+
+
+</body>
+</html>

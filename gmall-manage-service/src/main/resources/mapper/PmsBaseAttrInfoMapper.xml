@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chendong.gmall.manage.mapper.PmsBaseAttrInfoMapper">
+
+    <select id="selectAttrValueListByValueId" resultMap="selectAttrValueListByValueIdMap">
+      SELECT
+	    ai.*,ai.id as ai_id,av.*,av.id as av_id
+      FROM
+	  pms_base_attr_info ai
+      INNER JOIN pms_base_attr_value av ON
+      ai.id = av.attr_id
+      AND av.id in (${valueId})
+    </select>
+
+    <resultMap id="selectAttrValueListByValueIdMap" type="com.chendong.gmall.bean.PmsBaseAttrInfo" autoMapping="true">
+
+        <result column="ai_id" property="id"></result>
+
+        <collection property="attrValueList" ofType="com.chendong.gmall.bean.PmsBaseAttrValue" autoMapping="true">
+
+            <result column="av_id" property="id"></result>
+
+        </collection>
+    </resultMap>
+
+
+</mapper>

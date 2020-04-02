@@ -12,8 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AttrServiceImpl implements AttrService{
@@ -25,56 +25,77 @@ public class AttrServiceImpl implements AttrService{
     PmsBaseAttrValueMapper pmsBaseAttrValueMapper;
 
     @Autowired
-    PmsBaseSaleAttrMapper pmsBaseSaleAtrrMapper;
+    PmsBaseSaleAttrMapper pmsBaseSaleAttrMapper;
 
+    /**
+     * 根据三级分类id查询平台属性和平台属性值
+     * @param catalog3Id 三级分类id
+     * @return 平台属性和平台属性值
+     */
     @Override
     public List<PmsBaseAttrInfo> attrInfoList(String catalog3Id) {
-        //平台属性表
+
+        //1.平台属性
+        //根据三级目录查询
         PmsBaseAttrInfo pmsBaseAttrInfo = new PmsBaseAttrInfo();
         pmsBaseAttrInfo.setCatalog3Id(catalog3Id);
-        //查询
+        //调用通用mapper，传入待查询的平台属性对象，返回平台属性表
         List<PmsBaseAttrInfo> pmsBaseAttrInfos = pmsBaseAttrInfoMapper.select(pmsBaseAttrInfo);
 
-        //平台属性值
+        //2.平台属性值
+        //平台属性表对应着平台属性值，对平台属性表进行遍历，给每个平台属性赋予平台属性值
         for(PmsBaseAttrInfo baseAttrInfo : pmsBaseAttrInfos){
-            List<PmsBaseAttrValue> pmsBaseAttrValues = new ArrayList<>();
+            //平台属性值
             PmsBaseAttrValue pmsBaseAttrValue = new PmsBaseAttrValue();
             pmsBaseAttrValue.setAttrId(baseAttrInfo.getId());
-            pmsBaseAttrValues = pmsBaseAttrValueMapper.select(pmsBaseAttrValue);
+            //调用通用mapper查询，并返回平台属性值表
+            List<PmsBaseAttrValue> pmsBaseAttrValues = pmsBaseAttrValueMapper.select(pmsBaseAttrValue);
+            //将对应的平台属性值的表存入平台属性
             baseAttrInfo.setAttrValueList(pmsBaseAttrValues);
         }
 
+        //返回平台属性和平台属性值
         return pmsBaseAttrInfos;
     }
 
+    /**
+     * 根据平台属性查询平台属性值
+     * @param attrId 平台属性
+     * @return 平台属性值
+     */
     @Override
     public List<PmsBaseAttrValue> getAttrValueList(String attrId) {
-
-        //平台属性值表
+        //平台属性值
         PmsBaseAttrValue pmsBaseAttrValue = new PmsBaseAttrValue();
         pmsBaseAttrValue.setAttrId(attrId);
-        //查询
+        //调用通用mapper查询
         return pmsBaseAttrValueMapper.select(pmsBaseAttrValue);
-
     }
 
+    /**
+     *
+     * @param pmsBaseAttrInfo
+     * @return
+     */
     @Override
     public String saveAttrInfo(PmsBaseAttrInfo pmsBaseAttrInfo) {
 
+        //根据平台销售属性获取平台属性值
         String id = pmsBaseAttrInfo.getId();
+
         if(StringUtils.isBlank(id)){
-            //id为空，保存
-            //保存属性
+            //平台属性值id为空，则为保存
+            //保存空的平台属性
             pmsBaseAttrInfoMapper.insertSelective(pmsBaseAttrInfo);//insertSelective是否将null插入数据库
 
-            //保存属性值
+            //保存平台属性值
             List<PmsBaseAttrValue> attrValueList = pmsBaseAttrInfo.getAttrValueList();
             for (PmsBaseAttrValue pmsBaseAttrValue : attrValueList) {
                 pmsBaseAttrValue.setAttrId(pmsBaseAttrInfo.getId());
                 pmsBaseAttrValueMapper.insertSelective(pmsBaseAttrValue);
             }
         } else {
-            //id不为空，修改
+            //平台属性id不为空，则为修改
 
             //属性修改
             Example example = new Example(PmsBaseAttrInfo.class);
@@ -102,6 +123,22 @@ public class AttrServiceImpl implements AttrService{
 
     @Override
     public List<PmsBaseSaleAttr> baseSaleAttrList() {
-        return pmsBaseSaleAtrrMapper.selectAll();
+        return pmsBaseSaleAttrMapper.selectAll();
+    }
+
+    /**
+     *
+     * @param valueIdSet 搜索结果中去重后的属性值id
+     * @return
+     */
+    @Override
+    public List<PmsBaseAttrInfo> getAttrValueListByValueId(Set<String> valueIdSet) {
+
+        //将valueIdSet转换成字符串
+        String valueId = StringUtils.join(valueIdSet, ",");
+
+        List<PmsBaseAttrInfo> pmsBaseAttrInfos = pmsBaseAttrInfoMapper.selectAttrValueListByValueId(valueId);
+
+        return pmsBaseAttrInfos;
     }
 }

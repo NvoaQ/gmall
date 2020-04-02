@@ -26,23 +26,25 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public List<PmsBaseCatalog1> getCatalog1() {
-        //查
+        //调用通用Mapper查询全部一级目录分类信息
         return pmsCatalog1Mapper.selectAll();
     }
 
     @Override
     public List<PmsBaseCatalog2> getCatalog2(String catalog1Id) {
+        //通过一级目录构建二级目录
         PmsBaseCatalog2 pmsBaseCatalog2 = new PmsBaseCatalog2();
         pmsBaseCatalog2.setCatalog1Id(catalog1Id);
-        //查
+        //调用通用Mapper，查询全部二级目录分类信息
         return pmsCatalog2Mapper.select(pmsBaseCatalog2);
     }
 
     @Override
     public List<PmsBaseCatalog3> getCatalog3(String catalog2Id) {
+        //通过二级目录构建三级目录
         PmsBaseCatalog3 pmsBaseCatalog3 = new PmsBaseCatalog3();
         pmsBaseCatalog3.setCatalog2Id(catalog2Id);
-        //查
+        //调用通用Mapper，查询全部三级目录分类信息
         return pmsCatalog3Mapper.select(pmsBaseCatalog3);
     }
 }

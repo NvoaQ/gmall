@@ -35,16 +35,20 @@ public class SpuController {
 
     }
 
-    //文件上传
+    /**
+     * 将图片或者视频上传到分布式的文件存储系统
+     * @param multipartFile
+     * @return
+     */
     @RequestMapping("fileUpload")
     @ResponseBody
     public String fileUpload(@RequestParam("file") MultipartFile multipartFile){
-        //将图片或者视频上传到分布式的文件存储系统
         //将图片的存储路径返回给页面
         String imgUrl= PmsUploadUtil.uploadImage(multipartFile);
+        //将url打印到控制台
         System.out.println(imgUrl);
+        //返回url
         return imgUrl;
-
     }
 
     //保存spu信息

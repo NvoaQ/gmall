@@ -83,6 +83,7 @@ public class SpuServiceImpl implements SpuService {
             pmsProductSaleAttrValue.setProductId(spuId);
             pmsProductSaleAttrValue.setSaleAttrId(productSaleAttr.getSaleAttrId());// 销售属性id用的是系统的字典表中id，不是销售属性表的主键
             List<PmsProductSaleAttrValue> pmsProductSaleAttrValues = pmsProductSaleAttrValueMapper.select(pmsProductSaleAttrValue);
+
             productSaleAttr.setSpuSaleAttrValueList(pmsProductSaleAttrValues);
         }
 
@@ -98,6 +99,30 @@ public class SpuServiceImpl implements SpuService {
 
         return pmsProductImages;
 
+    }
+
+    @Override
+    public List<PmsProductSaleAttr> spuSaleAttrListCheckBySku(String productId,String skuId) {
+
+//        PmsProductSaleAttr pmsProductSaleAttr = new PmsProductSaleAttr();
+//        pmsProductSaleAttr.setProductId(productId);
+//        List<PmsProductSaleAttr> pmsProductSaleAttrs = pmsProductSaleAttrMapper.select(pmsProductSaleAttr);
+//
+//        for(PmsProductSaleAttr productSaleAttr :pmsProductSaleAttrs){
+//
+//            String saleAttrId = productSaleAttr.getSaleAttrId();
+//
+//            //销售属性对象
+//            PmsProductSaleAttrValue pmsProductSaleAttrValue = new PmsProductSaleAttrValue();
+//            pmsProductSaleAttrValue.setSaleAttrId(saleAttrId);
+//            pmsProductSaleAttrValue.setProductId(productId);
+//            //向数据库查询对应的销售属性，返回
+//            List<PmsProductSaleAttrValue> pmsProductSaleAttrValues = pmsProductSaleAttrValueMapper.select(pmsProductSaleAttrValue);
+//            productSaleAttr.setSpuSaleAttrValueList(pmsProductSaleAttrValues);
+//        }
+
+        List<PmsProductSaleAttr> pmsProductSaleAttrs = pmsProductSaleAttrMapper.selectSpuSaleAttrListCheckBySku(productId,skuId);
+        return pmsProductSaleAttrs;
     }
 
 }

@@ -28,7 +28,7 @@ public class AttrController {
         return pmsBaseSaleAttrs;
     }
 
-    //根据属性id获取平台属性值表
+    //根据平台属性修改平台属性值
     @RequestMapping("getAttrValueList")
     @ResponseBody
     public List<PmsBaseAttrValue> getAttrValueList(String attrId){
@@ -36,7 +36,7 @@ public class AttrController {
         return pmsBaseAttrValues;
     }
 
-    //根据三级分类信息表，获取平台属性表
+    //根据三级分类信息，获取平台属性
     @RequestMapping("attrInfoList")
     @ResponseBody
     public List<PmsBaseAttrInfo> attrInfoList(String catalog3Id){
@@ -44,7 +44,7 @@ public class AttrController {
         return pmsBaseAttrInfos;
     }
 
-    //销售属性的保存
+    //保存平台销售属性
     @RequestMapping("saveAttrInfo")
     @ResponseBody
     public String saveAttrInfo(@RequestBody PmsBaseAttrInfo pmsBaseAttrInfo){

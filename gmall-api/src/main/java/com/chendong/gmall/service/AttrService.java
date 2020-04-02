@@ -5,6 +5,7 @@ import com.chendong.gmall.bean.PmsBaseAttrValue;
 import com.chendong.gmall.bean.PmsBaseSaleAttr;
 
 import java.util.List;
+import java.util.Set;
 
 public interface AttrService {
 
@@ -19,4 +20,6 @@ public interface AttrService {
 
     //添加商品的spu信息
     List<PmsBaseSaleAttr> baseSaleAttrList();
+
+    List<PmsBaseAttrInfo> getAttrValueListByValueId(Set<String> valueIdSet);
 }
