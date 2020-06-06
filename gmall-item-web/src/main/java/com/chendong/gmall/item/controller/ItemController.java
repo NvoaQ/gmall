@@ -26,57 +26,51 @@ public class ItemController {
     SpuService spuService;
 
     @RequestMapping("{skuId}.html")
-    public String item(@PathVariable String skuId, ModelMap map, HttpServletRequest request){
-
+    public String item(@PathVariable String skuId, ModelMap map, HttpServletRequest request) {
         //获取访问网页的ip地址
         String ip = request.getRemoteAddr();
-
         //根据skuId从sku库存单元表中取信息
-        PmsSkuInfo pmsSkuInfo = skuService.getSkuById(skuId,ip);
-
+        PmsSkuInfo pmsSkuInfo = skuService.getSkuById(skuId, ip);
         //将取出的sku对象放入item.html页面中
-        map.put("skuInfo",pmsSkuInfo);
-
+        map.put("skuInfo", pmsSkuInfo);
         //sku对象对应的销售属性列表放入页面中
-        List<PmsProductSaleAttr> pmsProductSaleAttrs = spuService.spuSaleAttrListCheckBySku(pmsSkuInfo.getProductId(),pmsSkuInfo.getId());
-        map.put("spuSaleAttrListCheckBySku",pmsProductSaleAttrs);
-
+        List<PmsProductSaleAttr> pmsProductSaleAttrs = spuService.spuSaleAttrListCheckBySku(pmsSkuInfo.getProductId(), pmsSkuInfo.getId());
+        map.put("spuSaleAttrListCheckBySku", pmsProductSaleAttrs);
         //没使用静态化，如果使用静态化，应该将查到的hash表放到js文件中
         //查询当前sku所在的spu的其他sku的集合的hash表
         HashMap<String, String> skuSaleAttrHashMap = new HashMap<>();
         List<PmsSkuInfo> pmsSkuInfos = skuService.getSkuSaleAttrValueListBySpu(pmsSkuInfo.getProductId());
-
         //拼串 239|241| 106    <==>    销售属性值id|销售属性值id| skuid
         for (PmsSkuInfo skuInfo : pmsSkuInfos) {
-            String k ="";
+            String k = "";
+            //skuId
             String v = skuInfo.getId();
             List<PmsSkuSaleAttrValue> skuSaleAttrValueList = skuInfo.getSkuSaleAttrValueList();
             for (PmsSkuSaleAttrValue pmsSkuSaleAttrValue : skuSaleAttrValueList) {
-                k += pmsSkuSaleAttrValue.getSaleAttrValueId()+"|";//239|241|
+                k += pmsSkuSaleAttrValue.getSaleAttrValueId() + "|";//239|241|
             }
-            skuSaleAttrHashMap.put(k,v);
+            skuSaleAttrHashMap.put(k, v);
         }
-
-        //将Java里的map转化为JSON字符串对象，Alibaba的fastjson
+        //转化为JSON字符串
         String skuSaleAttrHashJsonStr = JSON.toJSONString(skuSaleAttrHashMap);
         //将sku的销售属性hash表放到页面
-        map.put("skuSaleAttrHashJsonStr",skuSaleAttrHashJsonStr);
+        map.put("skuSaleAttrHashJsonStr", skuSaleAttrHashJsonStr);
 
         return "item";
     }
 
     @RequestMapping("index")
-    public String index(ModelMap modelMap){
+    public String index(ModelMap modelMap) {
 
         List<String> list = new ArrayList<>();
-        for(int i=0;i<5;i++){
-            list.add("循环数据"+i);
+        for (int i = 0; i < 5; i++) {
+            list.add("循环数据" + i);
         }
 
-        modelMap.put("list",list);
-        modelMap.put("hello","hello thymeleaf!");
+        modelMap.put("list", list);
+        modelMap.put("hello", "hello thymeleaf!");
 
-        modelMap.put("check","1");
+        modelMap.put("check", "1");
         return "index";
     }
 

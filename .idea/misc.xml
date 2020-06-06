@@ -21,7 +21,6 @@
         <option value="$PROJECT_DIR$/gmall-api/pom.xml" />
         <option value="$PROJECT_DIR$/fastdfs-client-java/pom.xml" />
         <option value="$PROJECT_DIR$/gmall-passport-web/pom.xml" />
-        <option value="$PROJECT_DIR$/gmall-passport-service/pom.xml" />
         <option value="$PROJECT_DIR$/gmall-order-web/pom.xml" />
         <option value="$PROJECT_DIR$/gmall-order-service/pom.xml" />
         <option value="$PROJECT_DIR$/gmall-payment/pom.xml" />

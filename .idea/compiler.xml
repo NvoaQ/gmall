@@ -16,7 +16,6 @@
         <module name="gmall-manage-web" />
         <module name="gmall-order-service" />
         <module name="gmall-order-web" />
-        <module name="gmall-passport-service" />
         <module name="gmall-passport-web" />
         <module name="gmall-payment" />
         <module name="gmall-redis-test" />

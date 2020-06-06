@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,11 +57,12 @@ public class OrderController {
             omsOrder.setMemberId(memberId);
             omsOrder.setMemberUsername(nickName);
             omsOrder.setNote("速度发货");
-            String outTradeSn = "chendong-gamll" + System.currentTimeMillis();
+            omsOrder.setStatus("0");//未付款
+            SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMDDHHmmss");
+            String todayFormat = sdf.format(new Date());
+            String outTradeSn = "gamll" +todayFormat+ System.currentTimeMillis();
             omsOrder.setOrderSn(outTradeSn);
             omsOrder.setTotalAmount(totalAmount);
-            omsOrder.setTotalAmount(totalAmount);
-
             //通过主键id查询收获地址
             UmsMemberReceiveAddress umsMemberReceiveAddress = userService.getReceiveAddressById(deliveryAddressId);
             omsOrder.setReceiverDetailAddress(umsMemberReceiveAddress.getDetailAddress());
@@ -111,7 +113,7 @@ public class OrderController {
             modelMap.put("orderList",omsOrder);
 
             //重定向到支付系统
-            ModelAndView mv = new ModelAndView("redirect:http://payment.gmall.com:8087/index?outTradeSn="+outTradeSn);
+            ModelAndView mv = new ModelAndView("redirect:http://payment.gmall.com:8087/index");
             mv.addObject("totalAmount",totalAmount);
             mv.addObject("orderId",outTradeSn);
             return mv;

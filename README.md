@@ -1,6 +1,5 @@
-# gmall110105 本地修改版本
+# 2020-4-2 本地修改版本
 `gmall-user`用户服务端口号：**8080**
-
 `gmall-user-service`用户服务的service层端口号： **8070**
 `gmall-user-web`用户服务的web层端口号： **8080**
 

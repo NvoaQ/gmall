@@ -22,29 +22,48 @@ public class PassportController {
     @Reference
     UserService userService;
 
+    /**
+     * 第三方微博登录功能
+     * @param code 用户微博平台登录后给我们的授权码
+     * @param request 请求
+     * @return
+     */
     @RequestMapping("vlogin")
-    public String vlogin(String code,HttpServletRequest request) {
+    public String vlogin(String code, HttpServletRequest request) {
         //微博开发平台的接口定义
+        //App Key
         String client_id = "850529739";
+
+        //App Secret
         String client_secret = "ef666ca3d90d08f753da32e3ee898f7f";
+
+        //回调地址
         String redirect_uri = "http://passport.gmall.com:8085/vlogin";
+
+        //第三方开放的API接口
         String url = "https://api.weibo.com/oauth2/access_token?";
-        Map<String,String> map = new HashMap<>();
-        map.put("client_id",client_id);
-        map.put("client_secret",client_secret);
-        map.put("redirect_uri",redirect_uri);
-        map.put("code",code);
-        map.put("grant_type","authorization_code");
+
+        //封装App Key | App Secret | 回调地址 | 授权码
+        //去请求authorization_code
+        Map<String, String> map = new HashMap<>();
+        map.put("client_id", client_id);
+        map.put("client_secret", client_secret);
+        map.put("redirect_uri", redirect_uri);
+        map.put("code", code);
+        map.put("grant_type", "authorization_code");
+
         //获取accessToken
-        String accessTokenJson = HttpclientUtil.doPost(url,map);
-        Map<String,Object> accessMap = JSON.parseObject(accessTokenJson, Map.class);
+        String accessTokenJson = HttpclientUtil.doPost(url, map);
+        Map<String, Object> accessMap = JSON.parseObject(accessTokenJson, Map.class);
         String access_token = (String) accessMap.get("access_token");
         String uid = (String) accessMap.get("uid");
-        //根据accessToken和uid获取用户信息
+
+        //根据accessToken和uid去微博的开放API去获取用户信息
         String getUserInfoUrl = "https://api.weibo.com/2/users/show.json?";
-        String getTotalUrl = getUserInfoUrl+"access_token="+access_token+"&uid="+uid;
+        String getTotalUrl = getUserInfoUrl + "access_token=" + access_token + "&uid=" + uid;
         String userInfoJson = HttpclientUtil.doGet(getTotalUrl);
-        Map<String,Object> userInfoMap = JSON.parseObject(userInfoJson, Map.class);
+        Map<String, Object> userInfoMap = JSON.parseObject(userInfoJson, Map.class);
+
         //筛选感兴趣的内容
         UmsMember umsMember = new UmsMember();
         umsMember.setAccessCode(code);
@@ -53,23 +72,30 @@ public class PassportController {
         umsMember.setNickname((String) userInfoMap.get("screen_name"));
         umsMember.setSourceId((String) userInfoMap.get("idstr"));
         umsMember.setCity((String) userInfoMap.get("location"));
+
         //防止重复添加
         UmsMember umsMemberCheckParam = new UmsMember();
         umsMemberCheckParam.setSourceId(umsMember.getSourceId());
         UmsMember umsMemberCheck = userService.checkOauthUser(umsMemberCheckParam);
         //数据库没有
-        if(umsMemberCheck==null){
+        if (umsMemberCheck == null) {
             //添加到数据库中
             userService.addOauthUser(umsMember);
-        }else{
+        } else {
             umsMember = umsMemberCheck;
         }
         //获取token
         String token = getToken(umsMember, request);
-        return "redirect:http://search.gmall.com:8083/index?token="+token;
+        return "redirect:http://search.gmall.com:8083/index?token=" + token;
     }
 
-    private String  getToken(UmsMember umsMember,HttpServletRequest request) {
+    /**
+     * 获取并验证token
+     * @param umsMember 用户信息
+     * @param request 请求
+     * @return oken
+     */
+    private String getToken(UmsMember umsMember, HttpServletRequest request) {
         String token = "";
         //调用用户服务验证登录
         UmsMember umsMember1 = userService.loginCheck(umsMember);
@@ -78,7 +104,7 @@ public class PassportController {
             Map<String, Object> map = new HashMap<>();
             map.put("memberId", umsMember1.getId());
             map.put("memberNickname", umsMember1.getNickname());
-            //获取ip
+            //获取请求的ip地址
             String remoteAddr = request.getRemoteAddr();
             if (StringUtils.isBlank(remoteAddr)) {
                 remoteAddr = "127.0.0.1";
@@ -95,24 +121,25 @@ public class PassportController {
     /**
      * 验证token的真伪
      *
-     * @param token
-     * @return
+     * @param token 令牌
+     * @param remoteAddr 请求ip地址
+     * @return 验证token是否成功的json字符串
      */
     @RequestMapping("verify")
     @ResponseBody
-    public String verify(String token,String remoteAddr) {
-        //调用jwt验证token
+    public String verify(String token, String remoteAddr) {
+        //调用jwt工具类验证token
         //服务器密钥：gmall-chendong-hdu.com
-        //salt：remoteAddr
+        //盐值：     remoteAddr
         Map<String, Object> decode = JwtUtil.decode(token, "gmall-chendong-hdu.com", remoteAddr);
-        Map<String,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         //解析token
-        if(decode!=null){
-            map.put("status","success");
-            map.put("memberId",(String)decode.get("memberId"));
-            map.put("memberNickname",(String) decode.get("memberNickname"));
-        }else{
-            map.put("status","fail");
+        if (decode != null) {
+            map.put("status", "success");
+            map.put("memberId", (String) decode.get("memberId"));
+            map.put("memberNickname", (String) decode.get("memberNickname"));
+        } else {
+            map.put("status", "fail");
         }
         return JSON.toJSONString(map);
     }
@@ -127,7 +154,7 @@ public class PassportController {
     @ResponseBody
     public String login(UmsMember umsMember, HttpServletRequest request) {
         String token = getToken(umsMember, request);
-        if(StringUtils.isBlank(token)){
+        if (StringUtils.isBlank(token)) {
             //没有登录
             return "fail";
         }

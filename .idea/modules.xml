@@ -14,7 +14,6 @@
       <module fileurl="file://$PROJECT_DIR$/gmall-order-service/gmall-order-service.iml" filepath="$PROJECT_DIR$/gmall-order-service/gmall-order-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-order-web/gmall-order-web.iml" filepath="$PROJECT_DIR$/gmall-order-web/gmall-order-web.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-parent/gmall-parent.iml" filepath="$PROJECT_DIR$/gmall-parent/gmall-parent.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gmall-passport-service/gmall-passport-service.iml" filepath="$PROJECT_DIR$/gmall-passport-service/gmall-passport-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-passport-web/gmall-passport-web.iml" filepath="$PROJECT_DIR$/gmall-passport-web/gmall-passport-web.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-payment/gmall-payment.iml" filepath="$PROJECT_DIR$/gmall-payment/gmall-payment.iml" />
       <module fileurl="file://$PROJECT_DIR$/gmall-redisson-test/gmall-redis-test.iml" filepath="$PROJECT_DIR$/gmall-redisson-test/gmall-redis-test.iml" />

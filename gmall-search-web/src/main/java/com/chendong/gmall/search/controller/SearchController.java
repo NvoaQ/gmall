@@ -169,7 +169,6 @@ public class SearchController {
     @RequestMapping("index")
     @LoginRequire(loginSuccess = false)
     public String index(){
-
         return "index";
     }
 

@@ -37,10 +37,11 @@ public class PmsUploadUtil {
         }
 
         //通过tracker获得一个Storage的链接客户端
-        StorageClient storageClient = new StorageClient(trackerServer,null);
+        StorageClient storageClient = new StorageClient(trackerServer, null);
 
         try {
-            byte[] bytes = multipartFile.getBytes();//获得上传的二进制对象
+            //获得上传文件的二进制对象
+            byte[] bytes = multipartFile.getBytes();
 
             //获得文件后缀名
             String originalFilename = multipartFile.getOriginalFilename();//a.jpg
@@ -49,7 +50,7 @@ public class PmsUploadUtil {
             //获取文件名中"."的索引
             int i = originalFilename.lastIndexOf(".");
             //通过切分，获得文件的后缀名
-            String extName = originalFilename.substring(i+1);
+            String extName = originalFilename.substring(i + 1);
 
             String[] uploadInfos = storageClient.upload_file(bytes, extName, null);
 
